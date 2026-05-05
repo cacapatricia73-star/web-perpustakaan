@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Data peminjaman</title>
+
+    <style>
+        body {
+            font-family: Georgia;
+            background: radial-gradient(circle at top, #2b1055, #1a0f3c);
+            padding: 40px;
+            color: white;
+        }
+
+        /* JUDUL */
+        h2 {
+            text-align: center;
+            text-shadow: 0 0 10px #c77dff;
+        }
+
+        /* BOX BESAR */
+        .arsip {
+            margin-top: 20px;
+            background: #fdf6e3;
+            color: black;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            border: 3px solid #d4af37;
+        }
+
+        /* SEARCH */
+        .search {
+            margin-bottom: 15px;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            background: #fff8dc;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        /* CARD */
+        .item {
+            background: linear-gradient(135deg, #7209b7, #f72585);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: 0.3s;
+            position: relative;
+            animation: fade 0.5s ease;
+        }
+
+        .item:hover {
+            transform: scale(1.05);
+        }
+
+        /* ANIMASI */
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* BADGE */
+        .badge {
+            font-size: 11px;
+            background: gold;
+            color: black;
+            padding: 3px 6px;
+            border-radius: 10px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* BUTTON */
+        .hapus {
+            margin-top: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 8px;
+            background: #ff4d6d;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* LINK */
+        a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h2>📜 Data peminjaman</h2>
+
+    <a href="web6.html" style="
+position:fixed;
+top:20px;
+left:20px;
+text-decoration:none;
+background:#4a6cff;
+color:white;
+padding:8px 16px;
+border-radius:8px;">
+        ⬅ Beranda
+    </a>
+
+    <div class="arsip">
+
+        <div class="search">
+            <input type="text" id="cari" placeholder="🔍 Cari nama / buku...">
+        </div>
+
+        <div class="grid" id="list"></div>
+
+        <button class="hapus" onclick="hapusSemua()">🗑 Hapus Semua</button>
+
+    </div>
+
+    <script>
+
+        let data = JSON.parse(localStorage.getItem("dataPinjam")) || [];
+        let list = document.getElementById("list");
+        let cari = document.getElementById("cari");
+
+        function tampilkan(filter = "") {
+            list.innerHTML = "";
+
+            let hasil = data.filter(d =>
+                d.nama.toLowerCase().includes(filter) ||
+                d.buku.toLowerCase().includes(filter)
+            );
+
+            if (hasil.length === 0) {
+                list.innerHTML = "<p>Tidak ditemukan...</p>";
+                return;
+            }
+
+            hasil.forEach((d, i) => {
+                list.innerHTML += `
+        <div class="item">
+            <span class="badge">👑</span>
+            <b>${d.nama}</b><br><br>
+            📖 ${d.buku}<br>
+            🗓 ${d.pinjam}<br>
+            🔁 ${d.kembali}<br><br>
+            <button class="hapus" onclick="hapusSatu(${i})">Hapus</button>
+        </div>
+        `;
+            });
+        }
+
+        function hapusSemua() {
+            if (confirm("Hapus semua data?")) {
+                localStorage.removeItem("dataPinjam");
+                location.reload();
+            }
+        }
+
+        function hapusSatu(index) {
+            data.splice(index, 1);
+            localStorage.setItem("dataPinjam", JSON.stringify(data));
+            tampilkan(cari.value.toLowerCase());
+        }
+
+        cari.addEventListener("input", e => {
+            tampilkan(e.target.value.toLowerCase());
+        });
+
+        tampilkan();
+
+    </script>
+
+</body>
+
+</html>
