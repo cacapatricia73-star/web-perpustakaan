@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATA TERTIB PERPUSTAKAAN</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top, #2b1a4a, #120a24);
+            margin: 0;
+            padding: 30px;
+            color: #f5e6c8;
+            overflow-x: hidden;
+        }
+
+        /* ORNAMEN ATAS */
+        .ornamen-top {
+            text-align: center;
+            font-size: 28px;
+            color: gold;
+            margin-bottom: 10px;
+            letter-spacing: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-family: 'Cinzel', serif;
+            color: gold;
+            animation: glowTitle 2s infinite alternate;
+        }
+
+        @keyframes glowTitle {
+            from { text-shadow: 0 0 10px gold; }
+            to { text-shadow: 0 0 25px gold; }
+        }
+
+        .ornamen-bottom {
+            text-align: center;
+            font-size: 24px;
+            color: gold;
+            margin-bottom: 40px;
+            letter-spacing: 5px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+        }
+
+        .gambar-box {
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid gold;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            text-align: center;
+            transition: 0.4s;
+            position: relative;
+        }
+
+        .gambar-box:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.7);
+        }
+
+        .gambar-box img {
+            max-height: 420px;
+            width: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 3px solid gold;
+        }
+
+        .judul {
+            font-size: 22px;
+            font-family: 'Cinzel', serif;
+            color: gold;
+            margin-bottom: 10px;
+        }
+
+        /* tombol */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            background: linear-gradient(135deg, gold, #b8962e);
+            color: #2b1a4a;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 0 20px gold;
+        }
+
+        /* bintang lebih jelas */
+        .star {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: gold;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100vh); }
+        }
+
+        /* kabut dramatis */
+        .fog, .fog2 {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+        }
+
+        .fog {
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%);
+            animation: fogMove 30s linear infinite;
+        }
+
+        .fog2 {
+            background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);
+            animation: fogMove 50s linear infinite reverse;
+        }
+
+        @keyframes fogMove {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="fog"></div>
+    <div class="fog2"></div>
+
+    <a href="web6.html" class="back-btn">⬅ Beranda</a>
+
+    <div class="ornamen-top">✦ ✧ ✦ ✧ ✦</div>
+    <h1>📜 Perpustakaan 📜</h1>
+    <div class="ornamen-bottom">✦ ✧ ✦ ✧ ✦</div>
+
+    <div class="container">
+
+        <div class="gambar-box">
+            <div class="judul">Tata Tertib</div>
+            <img src="TatibPerpus.JPEG">
+        </div>
+
+        <div class="gambar-box">
+            <div class="judul">Visi & Misi</div>
+            <img src="visimisi.JPEG">
+        </div>
+
+    </div>
+
+    <script>
+        function createStar() {
+            const star = document.createElement("div");
+            star.classList.add("star");
+
+            star.style.left = Math.random() * window.innerWidth + "px";
+            star.style.top = window.innerHeight + "px";
+
+            const size = Math.random() * 4;
+            star.style.width = size + "px";
+            star.style.height = size + "px";
+
+            star.style.animationDuration = (Math.random() * 5 + 5) + "s";
+
+            document.body.appendChild(star);
+
+            setTimeout(() => star.remove(), 10000);
+        }
+
+        setInterval(createStar, 150);
+    </script>
+
+</body>
+
+</html>
