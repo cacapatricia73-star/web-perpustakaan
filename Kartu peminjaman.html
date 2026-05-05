@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Kartu Peminjaman</title>
+
+    <style>
+        /* 🌌 BACKGROUND MALAM */
+        body {
+            font-family: 'Georgia', serif;
+            background: radial-gradient(circle at top, #2b1055, #140a2e);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* ✨ BINTANG HALUS */
+        body::before {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: url("https://www.transparenttextures.com/patterns/stardust.png");
+            opacity: 0.25;
+            z-index: -1;
+        }
+
+        /* 📜 CONTAINER (KERTAS KERAJAAN) */
+        .container {
+            background: linear-gradient(145deg, #fff8dc, #fdf6e3);
+            padding: 30px;
+            border-radius: 25px;
+            width: 370px;
+            text-align: center;
+
+            border: 3px solid #d4af37;
+            /* emas */
+            box-shadow:
+                0 0 25px rgba(255, 215, 0, 0.6),
+                inset 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        /* 👑 JUDUL */
+        h2 {
+            color: #6a0dad;
+            text-shadow: 0 0 10px gold;
+        }
+
+        /* INPUT */
+        input,
+        select {
+            width: 92%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 12px;
+            border: 1px solid #d4af37;
+            background: #fffdf5;
+        }
+
+        /* ✨ BUTTON */
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            width: 95%;
+            border: none;
+            border-radius: 15px;
+
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #4b2e05;
+            font-weight: bold;
+
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* BUTTON HOVER */
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px gold;
+        }
+
+        /* 📜 KARTU */
+        .card {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 20px;
+
+            background: linear-gradient(135deg, #3a0ca3, #7209b7, #f72585);
+            color: white;
+
+            display: none;
+
+            border: 2px solid gold;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ✨ EFEK KILAU GERAK */
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.6),
+                    transparent);
+            animation: kilau 3s infinite;
+        }
+
+        @keyframes kilau {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* LINK */
+        a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <a href="peminjaman 5.html" style="position:fixed;top:20px;left:20px;
+text-decoration:none;
+background:#4a6cff;
+color:white;
+padding:8px 16px;
+border-radius:8px;">
+        ⬅ Beranda
+    </a>
+
+    <div class="container">
+
+        <h2>📜 Kartu Peminjaman Buku</h2>
+
+        <input type="text" id="nama" placeholder="Nama">
+
+        <select id="tingkat">
+            <option value="">Tingkat</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+        </select>
+
+        <select id="jurusan">
+            <option value="">Jurusan</option>
+            <option>RPL</option>
+            <option>PSPT</option>
+            <option>ULW</option>
+            <option>KC</option>
+            <option>KULINER 1</option>
+            <option>KULINER 2</option>
+            <option>KULINER 3</option>
+            <option>PH 1</option>
+            <option>PH 2</option>
+            <option>PH 3</option>
+            <option>DPB 1</option>
+            <option>DPB 2</option>
+            <option>DPB 3</option>
+        </select>
+
+        <input type="date" id="tanggalPinjam">
+        <input type="date" id="tanggalKembali">
+
+        <input type="text" id="buku" placeholder="Nama Buku">
+
+        <button onclick="buatKartu()">✨ Buat Kartu</button>
+        <button onclick="lihatRiwayat()">📖 Lihat Peminjaman</button>
+
+        <div class="card" id="idCard">
+            <div id="tampilNama"></div>
+            <div id="tampilKelas"></div>
+            <div id="tampilTanggal"></div>
+        </div>
+
+
+    </div>
+
+    <script>
+
+        function buatKartu() {
+
+            let nama = document.getElementById("nama").value;
+            let tingkat = document.getElementById("tingkat").value;
+            let jurusan = document.getElementById("jurusan").value;
+            let pinjam = document.getElementById("tanggalPinjam").value;
+            let kembali = document.getElementById("tanggalKembali").value;
+            let buku = document.getElementById("buku").value;
+
+            if (!nama || !tingkat || !jurusan || !pinjam || !kembali || !buku) {
+                alert("Isi semua ya ✨");
+                return;
+            }
+
+            document.getElementById("tampilNama").innerHTML = nama;
+            document.getElementById("tampilKelas").innerHTML = tingkat + " " + jurusan;
+            document.getElementById("tampilTanggal").innerHTML =
+                "Pinjam: " + pinjam + "<br>Kembali: " + kembali;
+
+            document.getElementById("idCard").style.display = "block";
+
+            // 🔥 SIMPAN KE LOCAL STORAGE
+            let data = JSON.parse(localStorage.getItem("dataPinjam")) || [];
+
+            data.push({
+                nama: nama,
+                tingkat: tingkat,
+                jurusan: jurusan,
+                buku: buku,
+                pinjam: pinjam,
+                kembali: kembali
+            });
+
+            localStorage.setItem("dataPinjam", JSON.stringify(data));
+        }
+
+        function lihatRiwayat() {
+            // 🔥 PINDAH KE HALAMAN DATA
+            window.location.href = "data peminjaman.html";
+        }
+
+    </script>
+
+</body>
+
+</html>
