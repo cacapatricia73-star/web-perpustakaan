@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koleksi Buku</title>
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top, #2b1a4a, #120a24);
+            margin: 0;
+            padding: 20px;
+            color: #f5e6c8;
+            overflow-x: hidden;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            background: gold;
+            color: #2b1a4a;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 0 20px gold;
+            z-index: 999;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #categoryFilter {
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        #library {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding-bottom: 20px;
+        }
+
+        .book {
+            flex: 0 0 auto;
+            width: 140px;
+            height: 230px;
+            cursor: pointer;
+            border: 2px solid gold;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            transition: 0.4s;
+            background: rgba(18, 31, 72, 0.845);
+            position: relative;
+        }
+
+        .book:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px gold;
+        }
+
+        .book img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid gold;
+        }
+
+        .book-title {
+            margin-top: 8px;
+            font-family: 'Cinzel', serif;
+            color: gold;
+            font-size: 13px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .fav-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            color: rgba(255, 215, 0, 0.6);
+        }
+
+        .fav-btn.active {
+            color: gold;
+        }
+
+        .favorites {
+            margin-top: 20px;
+        }
+
+        .fav-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .fav-grid div {
+            cursor: pointer;
+            width: 80px;
+            text-align: center;
+        }
+
+        .fav-grid img {
+            width: 100%;
+            border-radius: 6px;
+            border: 2px solid gold;
+        }
+
+        /* Reader */
+        .reader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .reader-box {
+            background: rgba(28, 49, 91, 0.908);
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            color: #f5e6c8;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .reader-box h2 {
+            font-family: 'Cinzel', serif;
+            color: gold;
+            margin-bottom: 10px;
+        }
+
+        .reader-box p {
+            line-height: 1.8;
+        }
+
+        /* Bintang & kabut */
+        .star {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: gold;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-100vh);
+            }
+        }
+
+        .fog,
+        .fog2 {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+        }
+
+        .fog {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 70%);
+            animation: fogMove 30s linear infinite;
+        }
+
+        .fog2 {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent 70%);
+            animation: fogMove 50s linear infinite reverse;
+        }
+
+        @keyframes fogMove {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fog"></div>
+    <div class="fog2"></div>
+
+    <a href="web6.html" class="back-btn">⬅ Beranda</a>
+
+    <header>
+        <input type="text" id="search" placeholder="Cari buku...">
+        <select id="categoryFilter">
+            <option value="all">Semua</option>
+            <option value="fiksi">Fiksi</option>
+            <option value="nonfiksi">Nonfiksi</option>
+            <option value="majalah">Majalah</option>
+        </select>
+    </header>
+
+    <div id="library"></div>
+
+    <div class="favorites">
+        <h2>⭐ Favorit</h2>
+        <div class="fav-grid" id="favGrid"></div>
+    </div>
+
+    <div class="reader" id="reader">
+        <div class="reader-box">
+            <h2 id="readerTitle"></h2>
+            <p id="readerContent"></p>
+            <button onclick="closeReader()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const books = [
+            { title: "Laut Bercerita", category: "fiksi", summary: "Laut Bercerita adalah novel karya Leila S. Chudori. Novel ini menceritakan persahabatan, cinta, dan keluarga yang mencari penjelasan atas kehilangan seorang anak tanpa titik terang bertahun-tahun." },
+            { title: "Bumi Manusia – Pramoedya Ananta Toer", category: "fiksi", summary: "Bumi Manusia karya Pramoedya Ananta Toer adalah novel yang mengisahkan perjuangan Minke, seorang pribumi cerdas di era kolonial Belanda, melawan ketidakadilan rasial atau feodalisme. Minke jatuh cinta dan menikah dengan Annelies, putri dari Nyai Ontosoroh, wanita pribumi yang tangguh dan berwawasan luas meskipun berstatus gundik. Novel ini menyoroti perlawanan hukum dan harga diri mereka terhadap sistem kolonial Belanda yang tidak adil." },
+            { title: "Perahu Kertas – Dee Lestari", category: "fiksi", summary: "Perahu Kertas mengisahkan pasang surut hubungan dua anak manusia, yaitu Kugy (Maudy Ayunda) dan Keenan (Adipati Dolken). Kugy adalah seorang gadis tomboy, periang, dan yang percaya bahwa dirinya adalah agen Dewa Neptunus. Kugy selalu memiliki ritual unik, yaitu menulis setiap curahan hatinya ke selembar kertas, yang lalu dibuatnya menjadi perahu untuk kemudian dihanyutkan ke air. Meskipun sekilas dia gadis periang yang slenge'an, tetapi dia memiliki pandangan hidup yang cenderung filosofis." },
+            { title: "Negeri 5 Menara – Ahmad Fuadi", category: "fiksi", summary: "Negeri 5 Menara karya Ahmad Fuadi tentang perjuangan Alif Fikri dari Maninjau, Sumatera Barat, yang terpaksa masuk Pesantren Pondok Madani, Ponorogo, alih-alih SMA umum. Bersama lima sahabatnya. disana Alif belajar di bawah mantra 'Man Jadda Wajada' (siapa yang bersungguh-sungguh akan berhasil)." },
+            { title: "Ayat-Ayat Cinta – Habiburrahman El Shirazy", category: "fiksi", summary: "Ayat -Ayat Cinta adalah novel drama romantis Islami tahun 2004 karya Habiburrahman El Shirazy . Berlatar di Kairo , Mesir, novel ini mengikuti kisah seorang mahasiswa Indonesia bernama Fahri yang dituduh melakukan pemerkosaan secara salah setelah menolak kasih sayang seorang wanita. Dengan dukungan istrinya, Aisha, Fahri menikahi tetangganya yang beragama Kristen Koptik, Maria, untuk membangunkannya dari koma. Kesaksian Maria memungkinkan Fahri dibebaskan, dan ia memeluk Islam sebelum meninggal." },
+            { title: "Dilan 1990 – Pidi Baiq", category: "fiksi", summary: "Novel Dilan 1990 mengisahkan tentang romansa SMA di Bandung antara Milea, siswi pindahan dari Jakarta dan Dilan anggota geng motor yang unik dan cerdas. Dilan mendekati Milea dengan cara unik dan gombalan khas.Meski sempat ditolak karena Milea punya pacar yaitu Beni, Dilan berhasil mencuri hatinya hingga berpacaran di akhir Tahun 1990"},
+            { title: "Supernova: Ksatria, Puteri, dan Bintang Jatuh", category: "fiksi", summary: "Novel Supernova Kesatria, Putri, dan Bintang Jatuh karya Dee Lestari yang bercerita tentang hubungan gelap antara Ferre (Ksatria), eksekutif muda sukses, dan Rana (Putri), seorang jurnalis yang sudah menikah. Dinamika cinta terlarang mereka dipengaruhi oleh kehadiran Diva (Bintang Jatuh), model dan pelacur kelas atas, serta jalinan fiksi yang ditulis oleh Dimas dan Reuben, sepasang sahabat yang merancang cerita tersebut."},
+            { title: "Cantik Itu Luka – Eka Kurniawan", category: "fiksi", summary: "Cantik Itu Luka karya Eka Kurniawan adalah novel realisme magis yang mengisahkan Dewi Ayu, seorang pelacur Indo-Belanda yang bangkit dari kubur setelah 21 tahun meninggal. Berlatar di kota fiktif Halimunda, novel ini menyoroti bagaimana kecantikan Dewi Ayu membawa petaka dan luka tragis bagi dirinya dan anak-anaknya di tengah kekejaman kolonial." },
+            { title: "Act of Money", category: "fiksi", summary: "Act of Money karya Dinda Delvira. Buku ini menceritakan tentang Kalandra dan Hazel, tokoh utama dengan latar belakang yang kontradiktif. Kalandra dengan kekayaannya dan Hazel dengan kesederhanaannya (dari segi finansial)." },
+            { title: "Hujan – Tere Liye", category: "fiksi", summary: "Novel Hujan karya Tere Liye yang mengisahkan perjuangan hidup dan cinta Lail, gadis yatim piatu yang bertahan dari bencana alam dahsyat. Berlatar dunia futuristik, Lail menjalin kisah cinta diam-diam dengan Esok yaitu sang penyelamatnya, di tengah perpisahan dan konflik emosional, hingga akhirnya belajar menerima masa lalu daripada menghapusnya." },
+
+            { title: "Filosofi Teras – Henry Manampiring", category: "nonfiksi", summary: "Buku Filosofi Teras karya Henry Manampiring adalah panduan populer mengenai filsafat Stoikisme (Stoisisme) Yunani-Romawi kuno yang diadaptasi untuk mengatasi kecemasan dan emosi negatif di kehidupan modern, khususnya di Indonesia. Inti buku ini mengajarkan fokus pada hal-hal yang bisa dikendalikan dan menerima hal di luar kendali untuk mencapai ketenangan batin."},
+            { title: "Sebuah Seni untuk Bersikap Bodo Amat – Mark Manson", category: "nonfiksi", summary: "Buku Sebuah Seni untuk Bersikap Bodo Amat (The Subtle Art of Not Giving a Fck*) oleh Mark Manson mengajarkan bahwa kunci hidup bahagia bukan dengan bersikap positif setiap saat, melainkan dengan menerima batasan diri dan memprioritaskan hal-hal yang benar-benar penting." },
+            { title: "Atomic Habits – James Clear", category: "nonfiksi", summary: "Atomic Habits karya James Clear mengajarkan bahwa perubahan besar berasal dari akumulasi kebiasaan kecil  dan perbaikan sistem, bukan tujuan instan. Kebiasaan dibangun melalui empat langkah: Isyarat , Keinginan, Respons, dan Imbalan, yang mengubah perilaku menjadi otomatis." },
+            { title: "Rich Dad Poor Dad – Robert T. Kiyosaki", category: "nonfiksi", summary: "Rich Dad Poor Dad karya Robert Kiyosaki adalah buku panduan literasi finansial yang mengajarkan pola pikir berbeda mengenai uang. Intinya, orang kaya membuat uang bekerja untuk mereka, bukan bekerja untuk uang. Buku ini menekankan pentingnya membangun aset (investasi), memahami laporan keuangan, dan membedakan aset dari liabilitas (kewajiban) untuk mencapai kebebasan finansial." },
+            { title: "Think and Grow Rich – Napoleon Hill", category: "nonfiksi", summary: "Think and Grow Rich, yang ditulis oleh Napoleon Hill, adalah buku berorientasi bisnis yang akan membantu Anda membuat keputusan keuangan dan mencapai kebebasan finansial. Jika Anda ingin menjadi taipan bisnis yang sukses, Anda perlu memahami makna dari apa yang disampaikan setiap bab." },
+            { title: "The Psychology of Money – Morgan Housel", category: "nonfiksi", summary: "The Psychology of Money karya Morgan Housel menekankan keberhasilan finansial lebih dipengaruhi oleh perilaku dan psikologi (kecerdasan emosional) daripada kecerdasan teknis. Mengelola uang dengan baik tidak selalu berarti rasional, melainkan masuk akal agar bisa tidur nyenyak. Kunci utamanya adalah menabung, bersabar, dan perspektif jangka panjang." },
+            { title: "How to Win Friends and Influence People – Dale Carnegie", category: "nonfiksi", summary: "How to Win Friends and Influence People karya Dale Carnegie mengajarkan bahwa kesuksesan dicapai melalui hubungan antarmanusia yang baik, bukan sekadar kemampuan teknis. Buku ini menekankan pentingnya tulus dalam berinteraksi, menghargai orang lain, dan melihat masalah dari perspektif" },
+            { title: "Start With Why – Simon Sinek", category: "nonfiksi", summary: "Buku Start with Why karya Simon Sinek mengajarkan bahwa pemimpin dan organisasi hebat menginspirasi orang lain dengan memulai dari tujuan atau keyakinan inti mereka (Why), bukan sekadar produk (What). Konsep ini didasarkan pada Golden Circle yang terdiri dari Mengapa, Bagaimana, dan Apa." },
+            { title: "Grit – Angela Duckworth", category: "nonfiksi", summary: "Buku Grit: Kekuatan Passion dan Kegigihan karya Angela Duckworth membahas bahwa kunci kesuksesan jangka panjang bukanlah bakat alami, melainkan kombinasi antara passion (hasrat) dan perseverance (kegigihan). Buku ini membuktikan melalui penelitian bahwa ketabahan (grit) dapat dipelajari dan dikembangkan oleh siapa saja, lebih penting daripada kecerdasan." },
+            { title: "Educated – Tara Westover", category: "nonfiksi", summary: "Educated adalah karya penulis Amerika Tara Westover . Westover menceritakan bagaimana ia mengatasi keluarganya yang menganut paham survivalisme Mormon untuk bisa kuliah dan menekankan pentingnya pendidikan dalam memperluas dunianya. Ia merinci perjalanannya dari kehidupan terisolasi di pegunungan pedesaan Clifton, Idaho hingga menyelesaikan program PhD di bidang sejarah di Universitas Cambridge . Ia memulai kuliah pada usia 17 tahun tanpa pendidikan formal. Ia mengeksplorasi perjuangannya untuk mendamaikan keinginannya untuk belajar dengan dunia yang ia tinggali bersama ayahnya." },
+
+            { title: "Tempo", category: "majalah", summary: "Tempo adalah majalah berita mingguan Indonesia yang umumnya meliput berita politik. Tempo merupakan majalah pertama yang tidak memiliki afiliasi dengan pemerintah. Edisi pertama Tempo diterbitkan pada 6 Maret 1971 dengan Goenawan Mohamad sebagai Pemimpin Redaksi." },
+            { title: "National Geographic Indonesia", category: "majalah", summary: "National Geographic adalah organisasi sains dan edukasi nirlaba yang didirikan pada tahun 1888, terkenal dengan majalah berbingkai kuning ikonik dan dokumenter berkualitas tinggi. Organisasi ini berfokus pada geografi, arkeologi, sains alam, dan pemuliharaan lingkungan dengan misi menginspirasi manusia untuk peduli pada planet bumi." },
+            { title: "Bobo", category: "majalah", summary: "Majalah BOBO bertujuan membangun karakter anak Indonesia dengan cara mengajak anak Indonesia mencintai kegiatan literasi, gerakan membaca, menulis dan menceritakan kembali. Majalah BOBO berisi berbagai informasi berupa pengetahuan, cerita bergambar, dongeng, hingga profil orang hebat yang inspiratif." },
+            { title: "Gadis", category: "majalah", summary: "Gadis adalah film Indonesia tahun 1980 yang disutradarai oleh sutradara Indonesia, Teddy Soeriaatmadja. Film ini menceritakan tentanglah kehidupan seorang gadis muda bernama Gadis (diperankan oleh Desy Ratnasari) yang berjuang menghadapi tantangan hidup setelah keluarganya mengalami kesulitan ekonomi. Gadis harus bekerja keras untuk membantu keluarganya, tapi dia juga harus menghadapi tekanan sosial dan kesulitan dalam menjalani hidupnya. Film ini menggambarkan perjuangan dan ketabahan seorang gadis muda dalam menghadapi realitas hidup." },
+            { title: "Cosmopolitan Indonesia", category: "majalah", summary: "Cosmopolitan adalah sebuah majalah gaya hidup wanita modern yang diterbitkan di Indonesia sejak Agustus 1997, kala itu dengan nama Kosmopolitan. Sejak Agustus 2001, majalah ini diterbitkan dengan nama Cosmopolitan. Majalah ini diterbitkan di Indonesia oleh PT Higina Alhadin dan tergabung dalam MRA Media di bawah kepemimpinan Soetikno Soedarjo.Majalah ini merupakan majalah wanita pertama di Indonesia yang berada di bawah lisensi Cosmopolitan Amerika Serikat." },
+            { title: "Forbes Indonesia", category: "majalah", summary: "Forbes Indonesia adalah edisi lokal majalah Forbes yang fokus pada bisnis, investasi, teknologi, dan gaya hidup di Indonesia. Mereka menyajikan profil pengusaha sukses, analisis pasar, dan daftar orang terkaya di Indonesia." },
+            { title: "Rolling Stone Indonesia", category: "majalah", summary: "Rolling Stone Indonesia adalah majalah musik dan gaya hidup populer berlisensi AS yang menjadi referensi utama industri musik tanah air. Terbit bulanan dan majalah ini menampilkan wawancara mendalam, ulasan album, politik, dan sampul ikonik, dengan edisi perdana menampilkan Bob Marley. Majalah ini tutup pada Januari 2018 karena kelesuan industri media cetak" },
+            { title: "Intisari", category: "majalah", summary: "Majalah Intisari adalah media legendaris di Indonesia yang berfokus pada penyajian informasi umum, ilmu pengetahuan, sejarah, kesehatan, dan kisah-kisah humaniora yang inspiratif" },
+            { title: "Kartini", category: "majalah", summary: "" },
+            { title: "Femina", category: "majalah", summary: "Novel Femina, Sejarah Baru Abad Pertengahan Melalui Perempuan yang Disingkirkan oleh Janina Ramirez meneliti ulang peran perempuan abad pertengahan yang sering diabaikan sejarah. Ramirez mengungkap kisah tokoh perempuan berpengaruh—seperti Jadwiga dari Polandia dan Margery  Kempe menantang narasi patriarki, serta menunjukkan dampak nyata mereka dalam politik, agama, dan budaya di masa itu." },
+        ];
+        books.forEach(b => b.cover = "foto.jpeg");
+
+        const library = document.getElementById("library");
+        const favGrid = document.getElementById("favGrid");
+        let favorites = [];
+
+        function render(data) {
+            library.innerHTML = "";
+            library.style.display = "flex";
+            library.style.flexWrap = "nowrap";
+            data.forEach((b, i) => {
+                const div = document.createElement("div");
+                div.className = "book";
+                div.innerHTML = `<div class="fav-btn ${favorites.includes(i) ? 'active' : ''}">⭐</div><img src="${b.cover}"><div class="book-title">${b.title}</div>`;
+                div.querySelector(".fav-btn").onclick = (e) => {
+                    e.stopPropagation();
+                    if (favorites.includes(i)) {
+                        favorites = favorites.filter(x => x !== i);
+                    } else { favorites.push(i); }
+                    render(data);
+                    renderFav();
+                };
+                div.onclick = () => openReader(b);
+                library.appendChild(div);
+            });
+        }
+        render(books);
+
+        document.getElementById("categoryFilter").onchange = (e) => {
+            const val = e.target.value;
+            if (val === "all") render(books);
+            else render(books.filter(b => b.category === val));
+        };
+
+        document.getElementById("search").oninput = (e) => {
+            const val = e.target.value.toLowerCase();
+            const filtered = books.filter(b => b.title.toLowerCase().includes(val));
+            render(filtered);
+        };
+
+        function renderFav() {
+            favGrid.innerHTML = "";
+            if (favorites.length === 0) { favGrid.innerHTML = "Belum ada favorit ⭐"; return; }
+            favorites.forEach(i => {
+                const d = document.createElement("div");
+                d.innerHTML = `<img src="${books[i].cover}"><div>${books[i].title}</div>`;
+                d.onclick = () => openReader(books[i]);
+                favGrid.appendChild(d);
+            });
+        }
+
+        function openReader(book) {
+            document.getElementById("reader").style.display = "flex";
+            document.getElementById("readerTitle").innerText = book.title;
+            document.getElementById("readerContent").innerText = book.summary;
+        }
+        function closeReader() { document.getElementById("reader").style.display = "none"; }
+
+        function createStar() {
+            const s = document.createElement("div");
+            s.classList.add("star");
+            s.style.left = Math.random() * window.innerWidth + "px";
+            s.style.top = window.innerHeight + "px";
+            const size = Math.random() * 4;
+            s.style.width = size + "px"; s.style.height = size + "px";
+            s.style.animationDuration = (Math.random() * 5 + 5) + "s";
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 10000);
+        }
+        setInterval(createStar, 150);
+    </script>
+</body>
+
+</html>
