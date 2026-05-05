@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profil perpus skaga</title>
+
+
+    <style>
+        /* BACKGROUND */
+        body {
+            margin: 0;
+            background: radial-gradient(circle at top, #2b1055, #140a2e);
+            font-family: 'Playfair Display', serif;
+            color: white;
+            padding: 40px;
+        }
+
+        /* JUDUL */
+        h1 {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            color: gold;
+            text-shadow: 0 0 20px gold;
+        }
+
+        /* CONTAINER */
+        .section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        /* BOX UMUM */
+        .box {
+            width: 400px;
+            padding: 20px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid gold;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* KILAU */
+        .box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shine 5s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* TEXT */
+        .text-box {
+            animation: slideLeft 1s ease;
+        }
+
+        @keyframes slideLeft {
+            from {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* FOTO */
+        .img-box {
+            display: flex;
+            justify-content: center;
+            animation: slideRight 1s ease;
+        }
+
+        @keyframes slideRight {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .img-box img {
+            width: 220px;
+            border-radius: 15px;
+            border: 3px solid gold;
+        }
+
+        /* JUDUL KECIL */
+        h2 {
+            font-family: 'Cinzel', serif;
+            color: gold;
+        }
+
+        /* BACK BUTTON */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: gold;
+            color: #2b1a4a;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <a href="web6.html" class="back-btn">⬅ Beranda</a>
+
+    <h1>📖 Profil Perpustakaan SMKN 3 JEMBERy</h1>
+
+    <!-- BAGIAN 1 -->
+    <div class="section">
+
+        <div class="box text-box">
+            <h2>📜 Catatan Awal</h2>
+            <p>
+                Perpustakaan sekolah ini didirikan pada tahun 1969 dan sejak awal telah menjadi pusat ilmu serta sumber belajar yang penting bagi siswa. Berbagai koleksi buku dan bahan bacaan disediakan untuk mendukung kegiatan belajar, memperluas wawasan, serta menumbuhkan minat baca di kalangan siswa. Selain itu, perpustakaan juga berperan sebagai tempat yang nyaman untuk mencari informasi, mengerjakan tugas, dan mengembangkan pengetahuan secara mandiri maupun bersama teman.
+            </p>
+        </div>
+
+        <div class="box img-box">
+            <img src="SKAGA.jpeg">
+        </div>
+
+    </div>
+
+    <!-- BAGIAN 2 -->
+    <div class="section">
+
+        <div class="box img-box">
+            <img src="pemustaka.jpeg">
+        </div>
+
+        <div class="box text-box">
+            <h2>👥 Profil</h2>
+            <p>
+                Para pemustaka dan teknisi merupakan bagian penting dari kehidupan perpustakaan, karena melalui peran keduanya budaya membaca tetap hidup dan terus berkembang. Pemustaka tidak hanya sebagai pengguna, tetapi juga sebagai penggerak suasana belajar yang aktif dan dinamis, sementara teknisi berperan dalam memastikan seluruh fasilitas dan sistem perpustakaan berjalan dengan baik. Dengan adanya kerja sama ini, perpustakaan menjadi ruang yang nyaman dan penuh semangat untuk menambah pengetahuan, berbagi informasi, serta menumbuhkan kebiasaan membaca yang bermanfaat.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BAGIAN 3 -->
+    <div class="section">
+
+        <div class="box text-box">
+            <h2>📝 Penutup</h2>
+            <p>
+                Perpustakaan diharapkan menjadi tempat belajar yang nyaman, tertib, dan penuh inspirasi bagi seluruh pemustaka. Suasana yang kondusif memungkinkan setiap orang untuk fokus dalam membaca, mencari informasi, maupun mengerjakan tugas dengan tenang. Selain itu, lingkungan yang rapi dan teratur juga membantu menciptakan rasa betah, sehingga perpustakaan tidak hanya menjadi tempat belajar, tetapi juga ruang yang mendorong lahirnya ide-ide baru dan semangat untuk terus menambah pengetahuan.
+            </p>
+        </div>
+
+        <div class="box img-box">
+            <img src="perpusskaga.jpeg">
+        </div>
+
+    </div>
+
+</body>
+
+</html>
