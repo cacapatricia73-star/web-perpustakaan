@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Layanan Perpustakaan</title>
+
+    <style>
+        /* BACKGROUND */
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top, #2b1055, #140a2e);
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* BOX UTAMA */
+        .box {
+            width: 650px;
+            padding: 30px;
+            border-radius: 20px;
+
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+
+            border: 2px solid gold;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.7);
+
+            position: relative;
+            overflow: hidden;
+
+            animation: fade 1s ease;
+        }
+
+        /* KILAU EMAS */
+        .box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shine 4s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* JUDUL */
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: gold;
+            text-align: center;
+            text-shadow: 0 0 15px gold;
+        }
+
+        /* PARAGRAF */
+        p {
+            margin-top: 15px;
+            line-height: 1.8;
+            color: #fff8dc;
+            text-align: justify;
+        }
+
+        /* ANIMASI MASUK */
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SPARKLE IMUT */
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: gold;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="web6.html" style="
+position:fixed;
+top:20px;
+left:20px;
+text-decoration:none;
+background:#4a6cff;
+color:white;
+padding:8px 16px;
+border-radius:8px;">
+        ⬅ Beranda
+    </a>
+
+    <div class="box">
+
+        <h1>📜 Layanan Perpustakaan</h1>
+
+        <p>
+            Layanan perpustakaan merupakan bagian utama dari sistem perpustakaan yang berfungsi
+            untuk menyediakan akses informasi dan bahan bacaan secara teratur, sistematis, dan mudah dijangkau oleh
+            pemustaka. Perpustakaan menyediakan berbagai jenis koleksi, seperti buku pelajaran, karya sastra,
+            referensi ilmiah, serta bahan bacaan umum yang disusun berdasarkan kategori tertentu agar memudahkan
+            proses pencarian. Dalam pelaksanaannya, layanan perpustakaan didukung oleh sistem teknis yang mengatur
+            proses peminjaman dan pengembalian buku secara tertib, sehingga pemustaka dapat menggunakan fasilitas
+            yang ada secara mandiri. Selain itu, perpustakaan juga menyediakan ruang baca yang nyaman dan kondusif
+            sebagai sarana untuk menunjang kegiatan belajar dan membaca. Dengan pengelolaan layanan yang terstruktur
+            serta pemanfaatan fasilitas secara optimal, perpustakaan tidak hanya berperan sebagai tempat penyimpanan
+            buku, tetapi juga sebagai pusat layanan informasi yang mendukung kegiatan pendidikan dan meningkatkan
+            budaya literasi di lingkungan sekolah.
+        </p>
+
+    </div>
+
+    <script>
+
+        /* SPARKLE */
+        function sparkle() {
+            const s = document.createElement("div");
+            s.className = "sparkle";
+
+            s.style.left = Math.random() * window.innerWidth + "px";
+            s.style.top = Math.random() * window.innerHeight + "px";
+
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 2000);
+        }
+
+        setInterval(sparkle, 400);
+
+    </script>
+
+</body>
+
+</html>
